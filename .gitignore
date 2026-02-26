@@ -1,0 +1,16 @@
+# Maven
+target/
+*.class
+*.jar
+*.war
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Secrets - never commit real credentials
+src/main/resources/application.yml
+
+# OS
+.DS_Store
