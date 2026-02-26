@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    # TODO 1: Crear la base de datos en MySQL local -> CREATE DATABASE crud_jwt_db;
+    # TODO 2: Configurar las credenciales correctas de tu MySQL local
+    url: jdbc:mysql://localhost:3306/crud_jwt_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: tu_password_aqui
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    # TODO 3: Cambiar ddl-auto a 'validate' en producción. Usar 'update' solo en desarrollo
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+
+# TODO 4: Configurar valores reales para JWT (usar variables de entorno en producción)
+jwt:
+  secret: TU_SECRET_KEY_BASE64_AQUI_MINIMO_256_BITS
+  expiration: 86400000 # 24 horas en milisegundos
+
+server:
+  port: 8080
