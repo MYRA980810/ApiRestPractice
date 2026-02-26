@@ -1,5 +1,13 @@
 package com.crud.api.exception;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.time.LocalDateTime;
+
 // TODO 1: Anotar con @RestControllerAdvice
 //   - Esta anotación combina @ControllerAdvice + @ResponseBody
 //   - Captura excepciones de TODOS los controllers centralizadamente
@@ -50,5 +58,31 @@ package com.crud.api.exception;
 // NOTA: El orden de los handlers importa. Spring busca el handler más específico primero.
 // Si ningún handler específico coincide, cae en el handler de Exception genérica.
 
+@RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    // Esta excepción se lanza cuando se intenta convertir un valor no válido a un enum específico,
+    // por ejemplo, si el cliente envía un valor de rol que no existe en el enum Role. 
+    // Es una excepción personalizada que puedes definir para manejar este caso específico.
+    @ExceptionHandler(InvalidEnumValueException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidEnumValue(InvalidEnumValueException ex) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .status(HttpStatus.BAD_REQUEST.value())
+                .message(ex.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    //Esta excepción se lanza cuando el JSON del request no se puede parsear correctamente, 
+    // por ejemplo, si el formato es incorrecto o si se intenta mapear un valor no válido a un enum.
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .status(HttpStatus.BAD_REQUEST.value())
+                .message("Invalid request body format")
+                .timestamp(LocalDateTime.now())
+                .build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
 }

@@ -1,7 +1,33 @@
 package com.crud.api.entity;
 
-// TODO 1: Definir el enum Role con los valores ADMIN y USER
-// TODO 2: Este enum se usará en la entidad User para asignar roles
-// TODO 3: Será mapeado como @Enumerated(EnumType.STRING) en User
+import java.util.Arrays;
+
+import com.crud.api.exception.InvalidEnumValueException;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum Role {
+
+    ADMIN("ADMIN"),
+    USER("USER");
+
+    private String code;
+    
+    
+    Role(String code) {
+        this.code = code;
+    }
+    
+    @JsonValue
+    public String getCode() {
+        return code;
+    }
+
+    @JsonCreator
+    public static Role fromCode(String code) {
+        return Arrays.stream(values())
+                .filter(role -> role.code.equals(code))
+                .findFirst()
+                .orElseThrow(() -> new InvalidEnumValueException(Role.class, code));
+    }
 }
