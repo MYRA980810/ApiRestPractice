@@ -1,30 +1,54 @@
 package com.crud.api.entity;
 
-// TODO 1: Anotar con @Entity y @Table(name = "users")
-// TODO 2: Usar Lombok: @Data, @Builder, @NoArgsConstructor, @AllArgsConstructor
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-// TODO 3: Implementar UserDetails de Spring Security para integrar con el sistema de autenticación
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-// TODO 4: Definir los siguientes campos:
-//   - id: Long, @Id, @GeneratedValue(strategy = GenerationType.IDENTITY)
-//   - name: String, @Column(nullable = false)
-//   - email: String, @Column(nullable = false, unique = true) -> será el username para Spring Security
-//   - password: String, @Column(nullable = false)
-//   - role: Role (enum), @Enumerated(EnumType.STRING), @Column(nullable = false)
-//   - createdAt: LocalDateTime, @Column(updatable = false), usar @PrePersist para auto-asignar
-//   - updatedAt: LocalDateTime, usar @PreUpdate para auto-actualizar
-
-// TODO 5: Definir la relación OneToMany con Order:
-//   - @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//   - private List<Order> orders = new ArrayList<>()
-
-// TODO 6: Implementar los métodos de UserDetails:
-//   - getAuthorities(): devolver role como SimpleGrantedAuthority con prefijo "ROLE_"
-//   - getUsername(): devolver el email
-//   - isAccountNonExpired(), isAccountNonLocked(), isCredentialsNonExpired(), isEnabled(): devolver true
-
-// TODO 7: Crear método @PrePersist onCreate() -> this.createdAt = LocalDateTime.now()
-// TODO 8: Crear método @PreUpdate onUpdate() -> this.updatedAt = LocalDateTime.now()
-
+@Entity
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false, unique = true)
+    private String email;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Order> orders = new ArrayList<>();
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();   
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();   
+    }
 }
