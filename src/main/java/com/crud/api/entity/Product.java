@@ -1,26 +1,55 @@
 package com.crud.api.entity;
 
-// TODO 1: Anotar con @Entity y @Table(name = "products")
-// TODO 2: Usar Lombok: @Data, @Builder, @NoArgsConstructor, @AllArgsConstructor
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
-// TODO 3: Definir los siguientes campos:
-//   - id: Long, @Id, @GeneratedValue(strategy = GenerationType.IDENTITY)
-//   - name: String, @Column(nullable = false)
-//   - description: String, @Column(columnDefinition = "TEXT")
-//   - price: BigDecimal, @Column(nullable = false, precision = 10, scale = 2)
-//   - stock: Integer, @Column(nullable = false)
-//   - active: Boolean, @Column(nullable = false), default true
 
-// TODO 4: Definir la relación ManyToOne con Category:
-//   - @ManyToOne(fetch = FetchType.LAZY)
-//   - @JoinColumn(name = "category_id", nullable = false)
-//   - private Category category
-//   - IMPORTANTE: Excluir 'category' del toString() con @ToString.Exclude para evitar recursión
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-// TODO 5: Definir la relación OneToMany con OrderItem (lado inverso):
-//   - @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
-//   - private List<OrderItem> orderItems = new ArrayList<>()
-//   - Excluir del toString() también
-
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Product {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String name;
+
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal price;
+
+    @Column(nullable = false)
+    private Integer stock;
+
+    @Column(nullable = false)
+    private Boolean active;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    @ToString.Exclude
+    private Category category;
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private List<OrderItem> orderItems = new ArrayList<>();
 }
