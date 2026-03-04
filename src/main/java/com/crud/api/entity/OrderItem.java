@@ -1,5 +1,22 @@
 package com.crud.api.entity;
 
+import java.math.BigDecimal;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 // TODO 1: Anotar con @Entity y @Table(name = "order_items")
 // TODO 2: Usar Lombok: @Data, @Builder, @NoArgsConstructor, @AllArgsConstructor
 
@@ -27,5 +44,42 @@ package com.crud.api.entity;
 //   - Esto actúa como una tabla intermedia enriquecida (relación ManyToMany entre Order y Product)
 //   - Patrón común cuando una relación many-to-many necesita campos extra (quantity, price)
 
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
 public class OrderItem {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private Integer quantity;
+
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal initPrice;
+
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal subtotal;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id", nullable = false)
+    @ToString.Exclude
+    private Order order;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id",nullable = false)
+    @ToString.Exclude
+    private Product product;
+
+    @PrePersist
+    protected void calculateSubTotal(){
+        this.subtotal = initPrice.multiply(BigDecimal.valueOf(quantity));
+    }
+
+
+
 }
