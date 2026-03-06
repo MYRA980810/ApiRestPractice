@@ -1,5 +1,15 @@
 package com.crud.api.repository;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import com.crud.api.entity.Order;
+import com.crud.api.entity.Status;
+
 // TODO 1: Crear interfaz que extienda JpaRepository<Order, Long>
 
 // TODO 2: Definir métodos de consulta:
@@ -13,5 +23,10 @@ package com.crud.api.repository;
 //     Optional<Order> findByIdWithItems(@Param("id") Long id)
 //   - Esto carga la orden junto con sus items en una sola consulta SQL
 
-public interface OrderRepository {
+public interface OrderRepository extends JpaRepository<Long, Order> {
+    List<Order> findByUserId(Long id);
+    List<Order> findByStatus(Status status);
+
+    @Query("SELECT o FROM Order o JOIN FETCH o.items WHERE o.id = :id")
+    Optional<Order> findByIdWithItems(@Param("id") Long id);
 }
