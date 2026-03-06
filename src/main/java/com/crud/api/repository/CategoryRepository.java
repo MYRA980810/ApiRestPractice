@@ -1,5 +1,11 @@
 package com.crud.api.repository;
 
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.crud.api.entity.Category;
+
 // TODO 1: Crear interfaz que extienda JpaRepository<Category, Long>
 
 // TODO 2: Definir métodos de consulta:
@@ -7,5 +13,7 @@ package com.crud.api.repository;
 //   - Boolean existsByName(String name)
 //     -> Útil para la validación personalizada de nombre único
 
-public interface CategoryRepository {
+public interface CategoryRepository extends JpaRepository<Long, Category> {
+    Optional<Category> findByName(String name);
+    Boolean existsByName(String name);
 }
