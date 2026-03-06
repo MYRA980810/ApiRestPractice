@@ -1,5 +1,11 @@
 package com.crud.api.repository;
 
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.crud.api.entity.User;
+
 // TODO 1: Crear interfaz que extienda JpaRepository<User, Long>
 // TODO 2: Anotar con @Repository (opcional ya que JpaRepository ya es detectado por Spring)
 
@@ -12,5 +18,7 @@ package com.crud.api.repository;
 // NOTA: Spring Data JPA genera la implementación automáticamente a partir del nombre del método
 // Convención: findBy[Campo], existsBy[Campo], deleteBy[Campo], countBy[Campo]
 
-public interface UserRepository {
+public interface UserRepository extends JpaRepository<Long, User>{
+    Optional<User> findByEmail(String email);
+    Boolean existByEmail(String email);
 }
