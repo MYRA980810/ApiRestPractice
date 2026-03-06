@@ -28,6 +28,7 @@ public interface ProductRepository extends JpaRepository<Long, Product>{
     List<Product> findByActiveTrue();
     List<Product> findByNameContainingIgnoreCase(String name);
 
+    //Consulata encargada de buscar producto por rango de precio
     @Query("SELECT p FROM Product p WHERE p.price BETWEEN :min AND :max AND p.active = true")
     List<Product> findByPriceRange(@Param("min") BigDecimal min, @Param("max") BigDecimal max);
 
