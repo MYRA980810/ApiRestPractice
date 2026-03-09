@@ -1,14 +1,22 @@
 package com.crud.api.dto.request;
 
-// TODO 1: Usar Lombok: @Data, @Builder, @NoArgsConstructor, @AllArgsConstructor
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-// TODO 2: Definir campos con validaciones:
-//   - @NotNull(message = "El ID del producto es obligatorio")
-//     private Long productId;
-//
-//   - @NotNull(message = "La cantidad es obligatoria")
-//     @Min(value = 1, message = "La cantidad debe ser al menos 1")
-//     private Integer quantity;
-
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderItemRequest {
+
+    @NotNull(message = "El ID del producto es obligatorio")
+    private Long productId;
+
+    @NotNull(message = "La cantidad es obligatoria")
+    @Min(value = 1, message = "La cantidad debe ser al menos 1")
+    private Integer quantity;
 }

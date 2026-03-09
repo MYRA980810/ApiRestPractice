@@ -23,7 +23,7 @@ import com.crud.api.entity.Product;
 //   - @Query("SELECT p FROM Product p WHERE p.price BETWEEN :min AND :max AND p.active = true")
 //     List<Product> findByPriceRange(@Param("min") BigDecimal min, @Param("max") BigDecimal max)
 
-public interface ProductRepository extends JpaRepository<Long, Product>{
+public interface ProductRepository extends JpaRepository<Product, Long>{
     List<Product> findByCategoryId(Long category);
     List<Product> findByActiveTrue();
     List<Product> findByNameContainingIgnoreCase(String name);
