@@ -1,5 +1,15 @@
 package com.crud.api.dto.request;
 
+import com.crud.api.validation.annotation.UniqueEmail;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 // TODO 1: Usar Lombok: @Data, @Builder, @NoArgsConstructor, @AllArgsConstructor
 
 // TODO 2: Definir campos con validaciones:
@@ -19,5 +29,22 @@ package com.crud.api.dto.request;
 // NOTA: @UniqueEmail es una anotación personalizada que verificará en BD si el email ya existe
 // Se implementará en validation/annotation/UniqueEmail.java y validation/validator/UniqueEmailValidator.java
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class RegisterRequest {
+
+    @NotBlank(message = "El nombre es obligatorio")
+    @Size(min = 2, max = 100, message = "El nombre debe tener entre 2 y 100 caracteres")
+    private String name;
+
+    @NotBlank(message = "El email es obligatorio")
+    @Email(message = "El formato del email no es válido")
+    @UniqueEmail
+    private String email;
+
+    @NotBlank(message = "La contraseña es obligatoria")
+    @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
+    private String password;
 }
