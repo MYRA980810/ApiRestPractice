@@ -1,25 +1,22 @@
 package com.crud.api.validation.annotation;
 
-// TODO 1: Crear la anotación personalizada @ValidPrice
-//   - @Target(ElementType.FIELD)
-//   - @Retention(RetentionPolicy.RUNTIME)
-//   - @Documented
-//   - @Constraint(validatedBy = ValidPriceValidator.class)
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-// TODO 2: Definir los métodos obligatorios:
-//   - String message() default "El precio debe ser mayor a 0 y tener máximo 2 decimales";
-//   - Class<?>[] groups() default {};
-//   - Class<? extends Payload>[] payload() default {};
+import com.crud.api.validation.validator.ValidPriceValidator;
 
-// USO EN DTO:
-//   @ValidPrice
-//   private BigDecimal price;
+import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
 
-// NOTA: Esta validación verifica:
-//   1. Que el precio sea mayor a 0
-//   2. Que tenga máximo 2 decimales (ej: 19.99 OK, 19.999 NO)
-
-// public @interface ValidPrice {
-// }
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Constraint(validatedBy = ValidPriceValidator.class)
 public @interface ValidPrice {
+    String message() default "El precio debe ser mayor a 0 y tener máximo 2 decimales";
+    Class<?>[] groups() default {};
+    Class<? extends Payload>[] payload() default {};
 }
